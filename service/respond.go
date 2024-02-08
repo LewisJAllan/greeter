@@ -3,13 +3,13 @@ package service
 import "context"
 
 type RespondRequest struct {
-	originalMessage string
+	OriginalMessage string
 }
 
 type RespondResponse struct {
-	responseMessage string
+	ResponseMessage string
 }
 
-func (s *Service) Respond(ctx context.Context, request RespondRequest) (RespondRequest, error) {
-	return RespondRequest{}, nil
+func (s *Service) Respond(ctx context.Context, request RespondRequest) (RespondResponse, error) {
+	return RespondResponse{}, nil
 }
