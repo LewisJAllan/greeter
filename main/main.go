@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 
+	async "github.com/LewisJAllan/application-helper/listeners/asynchronous"
 	grpclistener "github.com/LewisJAllan/application-helper/listeners/grpc"
 	app "github.com/LewisJAllan/application-helper/runner"
 	"github.com/LewisJAllan/application-helper/zaphelper"
 	"go.uber.org/zap"
 
+	"github.com/LewisJAllan/greeter/listeners/grpc"
 	"github.com/LewisJAllan/greeter/service"
-	"github.com/LewisJAllan/greeter/transport"
 )
 
 const ServiceName = "Greeter"
@@ -32,11 +33,14 @@ func setup(ctx context.Context, s *app.Service) ([]app.Runner, context.Context, 
 		zap.String("service_name", s.Name()),
 	)
 
-	svc := service.NewService()
+	asyncWaiter := async.NewAsyncWaiter()
 
-	client := transport.NewClient(&svc)
+	svc := service.NewService(&asyncWaiter)
+
+	client := grpc.NewClient(&svc)
 
 	return []app.Runner{
+		&asyncWaiter,
 		grpclistener.New(client),
 	}, ctx, nil
 }

@@ -1,6 +1,12 @@
 package service
 
-import "context"
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/LewisJAllan/application-helper/zaphelper"
+)
 
 type RespondRequest struct {
 	OriginalMessage string
@@ -11,5 +17,12 @@ type RespondResponse struct {
 }
 
 func (s *Service) Respond(ctx context.Context, request RespondRequest) (RespondResponse, error) {
-	return RespondResponse{}, nil
+	zaphelper.Info(ctx, "starting response")
+	s.concurrencyRunner.Run(func() {
+		time.Sleep(1 * time.Second)
+		fmt.Print("hello")
+	})
+	return RespondResponse{
+		ResponseMessage: "Hello World",
+	}, nil
 }

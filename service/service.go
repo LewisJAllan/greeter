@@ -1,7 +1,15 @@
 package service
 
-type Service struct{}
+type AsynchronousRunner interface {
+	Run(f func())
+}
 
-func NewService() Service {
-	return Service{}
+type Service struct {
+	concurrencyRunner AsynchronousRunner
+}
+
+func NewService(concurrencyRunner AsynchronousRunner) Service {
+	return Service{
+		concurrencyRunner: concurrencyRunner,
+	}
 }
